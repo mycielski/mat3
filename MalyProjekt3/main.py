@@ -1,12 +1,10 @@
+# Wykonanie: Tomasz Mycielski (304248)
+
 import math
 
+from numpy import radians
 from sympy import *
 
-
-# plt.figure(figsize=(8, 8))
-# plt.axis('equal')
-# plt.fill(x, y)
-# plt.show()
 
 # Zadanie 1
 # Obliczyć pole równoległoboku zadanego współrzędnymi jego wierzchołków
@@ -42,11 +40,15 @@ def pole_równoległoboku(*points):
     return math.sqrt(vector_length)
 
 
+# driver code
+print(pole_równoległoboku(Point3D(0, 0, 0), Point3D(5, 1, 0), Point3D(10, 1, 0)))
+
+
 # Zadanie 2
 # Obliczyć objętość równoległościanu zadanego współrzędnymi jego wierzchołków
 def pole_równoległościanu(*points):
     # Zakładamy, że argumeny podane do funkcji to cztery punkty, z których utworzyć można trzy prostopadłe odcinki.
-    # Na rysunku poniżej poprawną czwórką argumentów byłyby punkty c, a, d, g:
+    # Na rysunku poniżej poprawną czwórką argumentów byłyby punkty c, a, d, g (jako pierwszy podany musi być punkt, z którym sąsiadują pozostałe punkty):
     #      e---------f
     #     /|        /|
     #    / |       / |
@@ -56,13 +58,60 @@ def pole_równoległościanu(*points):
     #   |/        |/
     #   c---------d
 
+    matrix = Matrix([
+        []
+    ])
+    for i in range(1, 4):
+        auxiliary = Matrix([
+            []
+        ])
+        for j in range(3):
+            cell = simplify(
+                points[i][j] - points[0][j]
+            )
+            cell = Matrix([[cell]])
+            auxiliary = auxiliary.col_join(cell)
+        auxiliary = auxiliary.T
+        matrix = matrix.col_join(auxiliary)
+    return matrix.det()
+
+
+# driver code
+print(pole_równoległościanu(Point3D(1, 1, 3), Point3D(3, 5, 7), Point3D(2, 4, 6), Point3D(10, 20, 30)))
+
+
+# Zadanie 3
+# Obrócić trójkąt o podanych wierzchołkach o zadany kąt (w stopniach) przeciwnie do ruchu wskazóweg zegara, wokół początku układu współrzędnych.
+def obróć_o_kąt(angle, *points):
+    angle = radians(angle)
+    matrix = Matrix([
+        [cos(angle), -1 * sin(angle)],
+        [sin(angle), cos(angle)]
+    ])
+    vectors = []
     for point in points:
-        for coordinate in point.coordinates:
-            if isinstance(coordinate, (int, float)):
-                print(coordinate)
-    return
+        vectors.append(
+            Matrix([
+                point.coordinates[0],
+                point.coordinates[1]
+            ])
+        )
+    list = []
+    for vector in vectors:
+        vectors.append(matrix * vector)
+        vectors.pop(0)
+    for vector in vectors:
+        list.append(
+            Point2D(
+                vector[0,0],
+                vector[1,0]
+            )
+        )
+    return list
+
+print(obróć_o_kąt(60, Point2D(4, 9), Point2D(3, 8), Point2D(6, 5)))
 
 
-print(pole_równoległoboku(Point3D(0, 0, 0), Point3D(5, 1, 0), Point3D(10, 1, 0)))
-a = symbols('a')
-pole_równoległościanu(Point3D(1, a, 3))
+# Zadanie 4
+# Powiększyć kwadrat jednostkowy (kwadrat, którego boki mają długość jeden) trzykrotnie względem osi OX i dwukrotnie względem osi OY
+def powiększyć_kwadrat(ox, oy):

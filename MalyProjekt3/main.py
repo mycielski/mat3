@@ -103,15 +103,82 @@ def obróć_o_kąt(angle, *points):
     for vector in vectors:
         list.append(
             Point2D(
-                vector[0,0],
-                vector[1,0]
+                vector[0, 0],
+                vector[1, 0]
             )
         )
     return list
 
+
+# driver code
 print(obróć_o_kąt(60, Point2D(4, 9), Point2D(3, 8), Point2D(6, 5)))
 
 
 # Zadanie 4
 # Powiększyć kwadrat jednostkowy (kwadrat, którego boki mają długość jeden) trzykrotnie względem osi OX i dwukrotnie względem osi OY
-def powiększyć_kwadrat(ox, oy):
+def powiększyć_kwadrat(ox, oy, *points):
+    matrix = Matrix([
+        [ox, 0],
+        [0, oy]
+    ])
+    vectors = []
+    for point in points:
+        M = Matrix([
+            point.coordinates[0],
+            point.coordinates[1]
+        ])
+        print(M)
+        vectors.append(
+            M
+        )
+
+    for i in range(len(vectors)):
+        vectors[i] = (matrix * vectors[i])
+
+    list = []
+    for vector in vectors:
+        list.append(
+            Point2D(
+                vector[0, 0],
+                vector[1, 0]
+            )
+        )
+    return list
+
+
+# driver code
+print(powiększyć_kwadrat(3, 2, Point2D(0, 0), Point2D(1, 0), Point2D(1, 1), Point2D(0, 1)))
+
+
+# Zadanie 5
+# Zadany odcinek obrócić o podany kąt \alpha oraz powiększyć o p%
+def odcinek_obrócić_i_powiększyć(angle, p, *points):
+    angle = radians(angle)
+    p = 1 + p / 100
+    matrix = Matrix([
+        [cos(angle), -1 * sin(angle)],
+        [sin(angle), cos(angle)]
+    ])
+    vectors = []
+    for point in points:
+        vectors.append(
+            Matrix([
+                point.coordinates[0],
+                point.coordinates[1]
+            ])
+        )
+    for i in range(len(vectors)):
+        vectors[i] = matrix * vectors[i]
+    list = []
+    for vector in vectors:
+        list.append(
+            Point2D(
+                vector[0, 0] * p,
+                vector[1, 0] * p
+            )
+        )
+    return list
+
+
+# driver code
+print(odcinek_obrócić_i_powiększyć(90, 100, Point2D(0, 0), Point2D(1, 1)))

@@ -1,11 +1,11 @@
 # MAT3 Mały Projekt 4
 # Tomasz Mycielski (304248)
 
-import importlib
+from importlib.util import find_spec
 
 from sympy import Matrix, plot, symbols, simplify, Point2D
 
-matplotlib_is_available = importlib.util.find_spec("matplotlib") is not None
+matplotlib_is_available = find_spec("matplotlib") is not None
 
 
 def metoda_najmniejszych_kwadratow(polynomial_degree, *points):

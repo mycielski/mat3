@@ -3,7 +3,7 @@
 
 from importlib.util import find_spec
 
-from sympy import Matrix, plot, symbols, simplify, Point2D
+from sympy import plot, simplify, symbols, Matrix, Point2D
 
 matplotlib_is_available = find_spec("matplotlib") is not None
 

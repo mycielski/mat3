@@ -4,20 +4,27 @@
 from sympy import *
 
 
-def metoda_najmniejszych_kwadratow(deg, *points):
+def metoda_najmniejszych_kwadratow(polynomial_degree, *points):
     Y = Matrix([
         []
     ])
     X = Matrix([
         []
     ])
+
     for point in points:
         Y = Y.col_join(Matrix([
             [point[1]]
         ]))
-        X = X.col_join(Matrix([
-            [1, point[0]]
-        ]))
+        auxiliary = Matrix([
+            []
+        ])
+        for i in range(polynomial_degree + 1):
+            auxiliary = auxiliary.row_join(Matrix([
+                [point[0] ** i]
+            ]))
+        X = X.col_join(auxiliary)
+
     XT = X.T
     XTX = XT * X
     if XTX.det() == 0:
@@ -25,13 +32,18 @@ def metoda_najmniejszych_kwadratow(deg, *points):
         return
     B = XTX ** -1 * XT * Y
     x, y = symbols("x, y")
-    line_matrix = Matrix([
-        [1, x]
-    ]) * B
-    print("y = " + str(simplify(line_matrix[0, 0])))
+    polynomial_formula_matrix = Matrix([
+        []
+    ])
+    for i in range(polynomial_degree + 1):
+        polynomial_formula_matrix = polynomial_formula_matrix.row_join(Matrix([
+            [x ** i]
+        ]))
+    polynomial_formula_matrix = polynomial_formula_matrix * B
+    print("y = " + str(simplify(polynomial_formula_matrix[0, 0])) + "\n")
     # for plotting to work the Python interpreter must have matplotlib available for use
     # otherwise it will use a TextBackend library which sucks and does not work whatsoever
-    # p1 = plot(line_matrix[0, 0], show=True)
+    p1 = plot(polynomial_formula_matrix[0, 0], show=True)
 
 
 print("Zadanie 1")
@@ -55,4 +67,24 @@ metoda_najmniejszych_kwadratow(1,
                                Point2D(8, 4),
                                Point2D(9, 1),
                                Point2D(10, 1)
+                               )
+
+print("Zadanie 3")
+metoda_najmniejszych_kwadratow(2,
+                               Point2D(1, 7),
+                               Point2D(2, 10),
+                               Point2D(3, 11),
+                               Point2D(4, 24),
+                               Point2D(5, 35),
+                               Point2D(6, 46),
+                               Point2D(7, 55)
+                               )
+
+print("Zadanie 4")
+metoda_najmniejszych_kwadratow(3,
+                               Point2D(1, 2.54968),
+                               Point2D(2, 2.57332),
+                               Point2D(3, 3.77028),
+                               Point2D(4, 4.50018),
+                               Point2D(5, 6.23465)
                                )

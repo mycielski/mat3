@@ -5,7 +5,8 @@ from sympy import *
 
 # deklaracja zmiennych SymPy, które będę wykorzystywał w zadaniach
 alfa, a1, a2, a3, b1, b2, b3, c1, c2, c3, d1, d2, d3, p = symbols(
-    "alfa, a1, a2, a3, b1, b2, b3, c1, c2, c3, d1, d2, d3, p")
+    "alfa, a1, a2, a3, b1, b2, b3, c1, c2, c3, d1, d2, d3, p"
+)
 
 
 # Zadanie 1
@@ -21,22 +22,46 @@ def zadanie1():
 
         matrices = []
         matrices.append(
-            Matrix([
-                [points[1].coordinates[1] - points[0].coordinates[1], points[1].coordinates[2] - points[0].coordinates[2]],
-                [points[2].coordinates[1] - points[0].coordinates[1], points[2].coordinates[2] - points[0].coordinates[2]]
-            ])
+            Matrix(
+                [
+                    [
+                        points[1].coordinates[1] - points[0].coordinates[1],
+                        points[1].coordinates[2] - points[0].coordinates[2],
+                    ],
+                    [
+                        points[2].coordinates[1] - points[0].coordinates[1],
+                        points[2].coordinates[2] - points[0].coordinates[2],
+                    ],
+                ]
+            )
         )
         matrices.append(
-            Matrix([
-                [points[1].coordinates[0] - points[0].coordinates[0], points[1].coordinates[2] - points[0].coordinates[2]],
-                [points[1].coordinates[1] - points[0].coordinates[1], points[1].coordinates[2] - points[0].coordinates[2]]
-            ])
+            Matrix(
+                [
+                    [
+                        points[1].coordinates[0] - points[0].coordinates[0],
+                        points[1].coordinates[2] - points[0].coordinates[2],
+                    ],
+                    [
+                        points[1].coordinates[1] - points[0].coordinates[1],
+                        points[1].coordinates[2] - points[0].coordinates[2],
+                    ],
+                ]
+            )
         )
         matrices.append(
-            Matrix([
-                [points[1].coordinates[0] - points[0].coordinates[0], points[1].coordinates[1] - points[0].coordinates[1]],
-                [points[2].coordinates[0] - points[0].coordinates[0], points[2].coordinates[1] - points[0].coordinates[1]]
-            ])
+            Matrix(
+                [
+                    [
+                        points[1].coordinates[0] - points[0].coordinates[0],
+                        points[1].coordinates[1] - points[0].coordinates[1],
+                    ],
+                    [
+                        points[2].coordinates[0] - points[0].coordinates[0],
+                        points[2].coordinates[1] - points[0].coordinates[1],
+                    ],
+                ]
+            )
         )
         vector = [matrices[0].det(), -1 * matrices[1].det(), matrices[2].det()]
         output = 0
@@ -47,7 +72,11 @@ def zadanie1():
 
     # driver code
     print("ZADANIE 1:")
-    print(pole_rownolegloboku(Point3D(a1, a2, a3), Point3D(b1, b2, b3), Point3D(c1, c2, c3)))
+    print(
+        pole_rownolegloboku(
+            Point3D(a1, a2, a3), Point3D(b1, b2, b3), Point3D(c1, c2, c3)
+        )
+    )
 
 
 # Zadanie 2
@@ -66,17 +95,11 @@ def zadanie2():
         #   |/        |/
         #   c---------d
 
-        matrix = Matrix([
-            []
-        ])
+        matrix = Matrix([[]])
         for i in range(1, 4):
-            auxiliary = Matrix([
-                []
-            ])
+            auxiliary = Matrix([[]])
             for j in range(3):
-                cell = simplify(
-                    points[i][j] - points[0][j]
-                )
+                cell = simplify(points[i][j] - points[0][j])
                 cell = Matrix([[cell]])
                 auxiliary = auxiliary.col_join(cell)
             auxiliary = auxiliary.T
@@ -85,7 +108,14 @@ def zadanie2():
 
     # driver code
     print("ZADANIE 2:")
-    print(pole_rownolegloscianu(Point3D(a1, a2, a3), Point3D(b1, b2, b3), Point3D(c1, c2, c3), Point3D(d1, d2, d3)))
+    print(
+        pole_rownolegloscianu(
+            Point3D(a1, a2, a3),
+            Point3D(b1, b2, b3),
+            Point3D(c1, c2, c3),
+            Point3D(d1, d2, d3),
+        )
+    )
 
 
 # Zadanie 3
@@ -95,29 +125,16 @@ def zadanie3():
     def obroc_o_kat(angle, *points):
         if angle.is_number:
             angle = radians(angle)
-        matrix = Matrix([
-            [cos(angle), -1 * sin(angle)],
-            [sin(angle), cos(angle)]
-        ])
+        matrix = Matrix([[cos(angle), -1 * sin(angle)], [sin(angle), cos(angle)]])
         vectors = []
         for point in points:
-            vectors.append(
-                Matrix([
-                    point.coordinates[0],
-                    point.coordinates[1]
-                ])
-            )
+            vectors.append(Matrix([point.coordinates[0], point.coordinates[1]]))
         output = []
         for vector in vectors:
             vectors.append(matrix * vector)
             vectors.pop(0)
         for vector in vectors:
-            output.append(
-                Point2D(
-                    simplify(vector[0, 0]),
-                    simplify(vector[1, 0])
-                )
-            )
+            output.append(Point2D(simplify(vector[0, 0]), simplify(vector[1, 0])))
         return output
 
     # driver code
@@ -130,36 +147,27 @@ def zadanie3():
 # trzykrotnie względem osi OX i dwukrotnie względem osi OY.
 def zadanie4():
     def powiekszyc_kwadrat(ox, oy, *points):
-        matrix = Matrix([
-            [ox, 0],
-            [0, oy]
-        ])
+        matrix = Matrix([[ox, 0], [0, oy]])
         vectors = []
         for point in points:
-            m = Matrix([
-                point.coordinates[0],
-                point.coordinates[1]
-            ])
-            vectors.append(
-                m
-            )
+            m = Matrix([point.coordinates[0], point.coordinates[1]])
+            vectors.append(m)
 
         for i in range(len(vectors)):
-            vectors[i] = (matrix * vectors[i])
+            vectors[i] = matrix * vectors[i]
 
         output = []
         for vector in vectors:
-            output.append(
-                Point2D(
-                    simplify(vector[0, 0]),
-                    simplify(vector[1, 0])
-                )
-            )
+            output.append(Point2D(simplify(vector[0, 0]), simplify(vector[1, 0])))
         return output
 
     # driver code
     print("ZADANIE 4:")
-    print(powiekszyc_kwadrat(3, 2, Point2D(0, 0), Point2D(1, 0), Point2D(1, 1), Point2D(0, 1)))
+    print(
+        powiekszyc_kwadrat(
+            3, 2, Point2D(0, 0), Point2D(1, 0), Point2D(1, 1), Point2D(0, 1)
+        )
+    )
 
 
 # Zadanie 5
@@ -169,28 +177,15 @@ def zadanie5():
         if angle.is_number:
             angle = radians(angle)
         percentage = 1 + percentage / 100
-        matrix = Matrix([
-            [cos(angle), -1 * sin(angle)],
-            [sin(angle), cos(angle)]
-        ])
+        matrix = Matrix([[cos(angle), -1 * sin(angle)], [sin(angle), cos(angle)]])
         vectors = []
         for point in points:
-            vectors.append(
-                Matrix([
-                    point.coordinates[0],
-                    point.coordinates[1]
-                ])
-            )
+            vectors.append(Matrix([point.coordinates[0], point.coordinates[1]]))
         for i in range(len(vectors)):
             vectors[i] = matrix * vectors[i]
         output = []
         for vector in vectors:
-            output.append(
-                Point2D(
-                    vector[0, 0] * percentage,
-                    vector[1, 0] * percentage
-                )
-            )
+            output.append(Point2D(vector[0, 0] * percentage, vector[1, 0] * percentage))
         return output
 
     # driver code
@@ -198,9 +193,9 @@ def zadanie5():
     print(odcinek_obrocic_i_powiekszyc(alfa, p, Point2D(a1, a2), Point2D(b1, b2)))
 
 
-# driver code:
-zadanie1()
-zadanie2()
-zadanie3()
-zadanie4()
-zadanie5()
+if __name__ == "__main__":
+    zadanie1()
+    zadanie2()
+    zadanie3()
+    zadanie4()
+    zadanie5()

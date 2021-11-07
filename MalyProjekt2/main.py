@@ -5,7 +5,7 @@ from math import gcd as gcd
 def phi(n):
     result = 1
     for i in range(2, n):
-        if (gcd(i, n) == 1):
+        if gcd(i, n) == 1:
             result += 1
     return result
 
@@ -13,7 +13,7 @@ def phi(n):
 def generate_list_of_numbers(n):
     list = []
     for i in range(1, n):
-        if (gcd(i, n) == 1):
+        if gcd(i, n) == 1:
             list.append(i)
     return list
 
@@ -28,6 +28,7 @@ def prime_factors(n):
         list.append(2)
         n = n / 2
     import math
+
     for i in range(3, int(math.sqrt(n)) + 1, 2):
         while n % i == 0:
             list.append(int(i))
@@ -49,7 +50,7 @@ def test_pierwszosci_Lucasa(n):
     n1 = n - 1
     b = 2
     podzielniki = remove_duplicates_from_list(prime_factors(n1))
-    while (b < n):
+    while b < n:
         bool = True
         for p in podzielniki:
             if pow(b, n1, n) == 1 and pow(b, int(n1 / p), n) != 1:
@@ -67,7 +68,7 @@ def oblicz_rząd_elementu_w_grupie(element, modulo):
     i = element
     rząd = 1
     list = []
-    while (i != 1):
+    while i != 1:
         i = modular_multiplication(i, element, modulo)
         list.append(i)
         if len(list) != len(set(list)):
@@ -96,11 +97,21 @@ def znajdz_element_odwrotny(element, modulo):
 print("Zadanie pierwsze:")
 print("n=19")
 for element in generate_list_of_numbers(19):
-    print("Element " + str(element) + ", rząd: " + str(oblicz_rząd_elementu_w_grupie(element, 19)))
+    print(
+        "Element "
+        + str(element)
+        + ", rząd: "
+        + str(oblicz_rząd_elementu_w_grupie(element, 19))
+    )
 
 print("n=24")
 for element in generate_list_of_numbers(24):
-    print("Element " + str(element) + ", rząd: " + str(oblicz_rząd_elementu_w_grupie(element, 24)))
+    print(
+        "Element "
+        + str(element)
+        + ", rząd: "
+        + str(oblicz_rząd_elementu_w_grupie(element, 24))
+    )
 
 print("\nZadanie drugie:")
 print("Pierwiastki pierwotny")
@@ -126,10 +137,20 @@ else:
 print("\nZadanie czwarte:")
 print("W grupie multiplikatywnej n=19:")
 for element in generate_list_of_numbers(19):
-    print("Dla elementu " + str(element) + " elementem odwrotnym jest " + str(znajdz_element_odwrotny(element, 19)))
+    print(
+        "Dla elementu "
+        + str(element)
+        + " elementem odwrotnym jest "
+        + str(znajdz_element_odwrotny(element, 19))
+    )
 print("W grupie multiplikatywnej n=24:")
 for element in generate_list_of_numbers(24):
-    print("Dla elementu " + str(element) + " elementem odwrotnym jest " + str(znajdz_element_odwrotny(element, 24)))
+    print(
+        "Dla elementu "
+        + str(element)
+        + " elementem odwrotnym jest "
+        + str(znajdz_element_odwrotny(element, 24))
+    )
 
 print("\nZadanie piąte:")
 print("Test pierwszości Lucasa - liczba i wynik czy liczba jest pierwsza\n")
